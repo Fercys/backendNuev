@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContratoPedidosTable extends Migration
+class CreateContratoProductoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateContratoPedidosTable extends Migration
      */
     public function up()
     {
-        Schema::create('contrato_pedidos', function (Blueprint $table) {
+        Schema::create('contrato_producto', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_producto')->unsigned();
             $table->foreign('id_producto')
@@ -38,6 +38,6 @@ class CreateContratoPedidosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contrato_pedidos');
+        Schema::dropIfExists('contrato_producto');
     }
 }
