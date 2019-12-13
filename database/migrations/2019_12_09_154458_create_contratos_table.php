@@ -15,7 +15,6 @@ class CreateContratosTable extends Migration
     {
         Schema::create('contratos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_cliente');
             $table->date('f_inicio')->nullable();
             $table->date('f_final')->nullable();
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContratoProductoTable extends Migration
+class CreateProductoUsuariosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,18 @@ class CreateContratoProductoTable extends Migration
      */
     public function up()
     {
-        Schema::create('contrato_producto', function (Blueprint $table) {
+        Schema::create('producto_usuarios', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('kilos')->nullable();
             $table->unsignedBigInteger('id_producto')->unsigned();
             $table->foreign('id_producto')
                 ->references('id')
                 ->on('productos')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->unsignedBigInteger('id_contrato')->unsigned();
-            $table->foreign('id_contrato')
+            $table->unsignedBigInteger('id_users')->unsigned();
+            $table->foreign('id_users')
                 ->references('id')
-                ->on('productos')
+                ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->timestamps();
@@ -39,6 +38,6 @@ class CreateContratoProductoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contrato_producto');
+        Schema::dropIfExists('producto_usuarios');
     }
 }
