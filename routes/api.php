@@ -28,4 +28,13 @@ Route::get('/order', 'OrderController@show_all');
 Route::post('/order', 'OrderController@create');
 Route::put('/order/{id}', 'OrderController@update');
 Route::delete('/order/{id}', 'OrderController@destroy');
-
+//Productos
+Route::get('/product/{id}', 'ProductoController@show');
+Route::get('/product', 'ProductoController@show_all');
+Route::post('/product', 'ProductoController@create');
+Route::put('/product/{id}', 'ProductoController@update');
+Route::delete('/product/{id}', 'ProductoController@destroy');
+// Productos User
+Route::get('/product_users/users/{id}', 'ProductoUsersController@show_user_product');
+Route::get('/product_users/product/{id}', 'ProductoUsersController@show_product_user');
+Route::post('/product_users', 'ProductoUsersController@create');
