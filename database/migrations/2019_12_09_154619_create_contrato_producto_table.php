@@ -25,7 +25,7 @@ class CreateContratoProductoTable extends Migration
             $table->unsignedBigInteger('id_contrato')->unsigned();
             $table->foreign('id_contrato')
                 ->references('id')
-                ->on('productos')
+                ->on('contratos')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->timestamps();

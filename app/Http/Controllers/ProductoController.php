@@ -19,7 +19,7 @@ class ProductoController extends Controller
         $producto  = new Producto;
         $producto->detalle = $request->input('detalle');
         $producto->save();      
-        return response()->json(['Status' => 'Success', 'Value' => 'Registro Creado']);
+        return response()->json(['Status' => 'Success', 'Value' => $producto]);
     }    
     /*@italo: Solicitud de Productos*/
     public function show(Request $request)

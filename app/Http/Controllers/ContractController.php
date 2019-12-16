@@ -39,7 +39,7 @@ class ContractController extends Controller
         }catch(Exception $e){
             return response()->json(['Status' => 'Error', 'Value' => $e]);
         }        
-        return response()->json(['Status' => 'Success', 'Value' => 'Registro Creado']);
+        return response()->json(['Status' => 'Success', 'Value' => $contract]);
     }    
     /*@italo: Solicitud de Contratos*/
     public function show(Request $request)

@@ -22,6 +22,15 @@ Route::get('/contract', 'ContractController@show_all');
 Route::post('contract', 'ContractController@create');
 Route::put('/contract/{id}', 'ContractController@update');
 Route::delete('/contract/{id}', 'ContractController@destroy');
+// Contratos Productos
+Route::get('contract_product/{id}', 'ContratoProductoController@show');
+Route::get('contract_product', 'ContratoProductoController@show_all');
+Route::post('contract_product', 'ContratoProductoController@create');
+Route::put('/contract_product/{id}', 'ContratoProductoController@update');
+Route::delete('/contract_product/{id}', 'ContratoProductoController@destroy');
+
+Route::get('/contract_product/contract/{id}', 'ContratoProductoController@show_contract_product');
+Route::get('/contract_product/product/{id}', 'ContratoProductoController@show_product_contract');
 //Ordenes
 Route::get('/order/{id}', 'OrderController@show');
 Route::get('/order', 'OrderController@show_all');
