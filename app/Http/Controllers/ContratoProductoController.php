@@ -73,8 +73,6 @@ class ContratoProductoController extends Controller
             $response[$key]['products'] = [];
             foreach ($contract_product as $key2=>$value) {
                 $response[$key]['products'][$key2] = Producto::where('id',$value['id_producto'])->first();
-                //return Producto::where('id',$value['id_producto'])->first();
-                //array_push($response[$key]['products'],Producto::where('id',$value['id_producto'])->first());
             }           
         }
         return response()->json(['Status' => 'Success', 'Value' => $response]);

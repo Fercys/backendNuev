@@ -94,8 +94,6 @@ class OrderController extends Controller
         $detail->where('id_pedido',$request->route('id'))->delete();
         $header = new Encabezado;
         $header->destroy($request->route('id'));
-        //Detalle::where('id_pedido',$request->route('id'))->destroy();
-        //Encabezado::destroy($request->route('id'));
         return response()->json(['Status' => 'Success', 'Value' => 'Registro Eliminado']);        
     }
     private function insert_order($data,$contract_product){
