@@ -19,7 +19,7 @@ class ContratoProductoController extends Controller
         "contract":{
             "f_inicio":"25-12-2019",
             "f_final":"27-12-2019",
-            "id_user": 1,
+            "id_user": 1
         },
         "contract_product":[
             {

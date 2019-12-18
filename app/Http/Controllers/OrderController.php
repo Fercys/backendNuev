@@ -9,6 +9,7 @@ use App\ContratoProducto;
 use App\Producto;
 use App\Detalle;
 use App\Encabezado;
+//use App\User;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -19,7 +20,7 @@ class OrderController extends Controller
     {
         "id":2, //Este es el id del contrato, necesario para la validacion
         "f_entrega_deseada":"11-12-2019",
-        "id_producto":1
+        "id_producto":1,
         "cantidad_kg": 10,
         "f_creacion":"10-12-2019",
         "id_cliente":1
@@ -27,16 +28,28 @@ class OrderController extends Controller
     */ 
     public function create(Request $request)
     {   
-        $contract  = ContratoProducto::where('id_contrato',$request->input('id'))->first();  
-        $product = Producto::find($contract['id_producto']); 
-        $detail = Detalle::where('id_producto',$product['id'])->get();
+        if(Contrato::where([
+            ['id_user','=',$request->input('id_cliente')],
+            ['id','=',$request->input('id')]
+        ])->count() < 1){
+            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese usuario']);
+        }
+        $contract  = ContratoProducto::where([
+            ['id_contrato','=',$request->input('id')],
+            ['id_producto','=',$request->input('id_producto')]
+        ])->first();
+        if(empty($contract)){
+            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto']);
+        }  
+        $detail = Detalle::where('id_producto',$request->input('id_producto'))->get();
         $quantity_accumulated = 0;
         foreach($detail as $element){
             $quantity_accumulated += $element['cantidad_kg'];
         }
-        return $product['kilos'] > $quantity_accumulated  ? 
+        $quantity_accumulated += $request->input('cantidad_kg');
+        return $contract['kilos'] >= $quantity_accumulated  ? 
             response()->json(['Status' => 'Success', 'Value' => $this->insert_order($request->all(),$contract)]) : 
-            response()->json(['Status' => 'Error', 'Value' => 'Valor no debe sobre pasar los '.$product['kilos'].' kilos']);        
+            response()->json(['Status' => 'Error', 'Value' => 'Valor no debe sobre pasar los '.$contract['kilos'].' kilos']);        
     }
     /*@italo: Solicitud de Ordenes*/
     public function show(Request $request)
@@ -96,18 +109,18 @@ class OrderController extends Controller
         $header->destroy($request->route('id'));
         return response()->json(['Status' => 'Success', 'Value' => 'Registro Eliminado']);        
     }
-    private function insert_order($data,$contract_product){
+    private function insert_order($data){
         $detail = new Detalle;
         $contract = Contrato::where('id',$data['id'])->first();
         $header = new Encabezado;
         //@italo: Header Insert
-        $header->id_cliente = $contract['id_cliente'];
+        $header->id_cliente = $data['id_cliente'];
         $header->f_entrega_deseada = new Carbon($data['f_entrega_deseada']);
         $header->f_creacion = Carbon::now();
         $header->save();
         //@italo: Detail Insert
         $detail->id_pedido = $header->id;
-        $detail->id_producto = $contract_product['id_producto'];
+        $detail->id_producto = $data['id_producto'];
         $detail->cantidad_kg = $data['cantidad_kg'];
         $detail->save();
         return 'Register Done';
