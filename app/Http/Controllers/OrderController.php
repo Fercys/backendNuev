@@ -19,7 +19,10 @@ class OrderController extends Controller
     {
         "id":2, //Este es el id del contrato, necesario para la validacion
         "f_entrega_deseada":"11-12-2019",
-        "cantidad_kg": 10
+        "id_producto":1
+        "cantidad_kg": 10,
+        "f_creacion":"10-12-2019",
+        "id_cliente":1
     }
     */ 
     public function create(Request $request)
