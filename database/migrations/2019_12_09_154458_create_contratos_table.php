@@ -17,6 +17,12 @@ class CreateContratosTable extends Migration
             $table->bigIncrements('id');
             $table->date('f_inicio')->nullable();
             $table->date('f_final')->nullable();
+            $table->unsignedBigInteger('id_user')->unsigned();
+            $table->foreign('id_user')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
             $table->timestamps();
         });
     }

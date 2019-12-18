@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 use App\Contrato;
 use App\ContratoProducto;
 use App\Producto;
+use App\ProductoUsuario;
+use App\User;
 use Carbon\Carbon;
 
 class ContratoProductoController extends Controller
 {
     /*@italo: Registro de Productos*/
     /* Estructura de ejemplo, todos los campos son requeridos */
-    /*{
+    /*{        
         "contract":{
             "f_inicio":"25-12-2019",
-            "f_final":"27-12-2019"
+            "f_final":"27-12-2019",
+            "id_user": 1,
         },
         "contract_product":[
             {
@@ -36,6 +39,7 @@ class ContratoProductoController extends Controller
         $contract  = new Contrato;
         $contract->f_inicio = new Carbon($data_request['contract']['f_inicio']);
         $contract->f_final = new Carbon($data_request['contract']['f_final']);
+        $contract->id_user = $data_request['contract']['id_user'];
         $contract->save();
         //Agrega la relacion de contrato con productos
         $register = array();
@@ -59,9 +63,21 @@ class ContratoProductoController extends Controller
     }
     /*@italo: Solicitud de todos los ContratosProductos*/
     public function show_all(Request $request)
-    {
-        return response()->json(['Status' => 'Success', 'Value' => 
-            $contract_product = ContratoProducto::all()]);
+    {   
+        $contract = Contrato::all();
+        $response = [];
+        foreach ($contract as $key => $value) {
+            $response[$key]['contrato'] = $value;  
+            $response[$key]['usuario']= User::where('id',$value['id_user'])->get(); 
+            $contract_product = ContratoProducto::where('id_contrato',$value['id'])->get();
+            $response[$key]['products'] = [];
+            foreach ($contract_product as $key2=>$value) {
+                $response[$key]['products'][$key2] = Producto::where('id',$value['id_producto'])->first();
+                //return Producto::where('id',$value['id_producto'])->first();
+                //array_push($response[$key]['products'],Producto::where('id',$value['id_producto'])->first());
+            }           
+        }
+        return response()->json(['Status' => 'Success', 'Value' => $response]);
     }
     /*@italo: Actulizacion de Contratos*/
     /* Estructura de ejemplo, ningun campo es obligatorio */
