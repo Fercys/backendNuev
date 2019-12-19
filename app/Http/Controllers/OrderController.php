@@ -58,8 +58,8 @@ class OrderController extends Controller
         $quantity_accumulated = 0;
         foreach($detail as $element){
             $quantity_accumulated += $element['cantidad_kg'];
-        }
-        $quantity_accumulated += $request->input('cantidad_kg');
+        }return $detail;
+        $quantity_accumulated += $request->input('cantidad_kg'); 
         return $contract['kilos'] >= $quantity_accumulated  ? 
             response()->json(['Status' => 'Success', 'Value' => $this->insert_order($request->all(),$contract)]) : 
             response()->json(['Status' => 'Error', 'Value' => 'Valor no debe sobre pasar los '.$contract['kilos'].' kilos']);        
