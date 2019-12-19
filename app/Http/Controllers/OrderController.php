@@ -22,13 +22,12 @@ class OrderController extends Controller
         "f_entrega_deseada":"11-12-2019",
         "id_producto":1,
         "cantidad_kg": 10,
-        "f_creacion":"10-12-2019",
         "id_cliente":1
     }
     */ 
     public function create(Request $request)
     {   
-        if(Contrato::where([
+        /*if(Contrato::where([
             ['id_user','=',$request->input('id_cliente')],
             ['id','=',$request->input('id')]
         ])->count() < 1){
@@ -40,8 +39,22 @@ class OrderController extends Controller
         ])->first();
         if(empty($contract)){
             return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto']);
-        }  
-        $detail = Detalle::where('id_producto',$request->input('id_producto'))->get();
+        } */
+        $contract_user = Contrato::where('id_user',$request->input('id_cliente'))->get();
+        foreach ($contract_user as $key => $value) {
+            $aux = ContratoProducto::where([
+                ['id_contrato','=',$value['id']],
+                ['id_producto','=',$request->input('id_producto')]
+            ])->first();
+            if(!empty($aux)){
+                $contract = $aux;
+                break;
+            }
+        }
+        if(!isset($contract)){
+            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto o usuario']);
+        }
+        $detail = Detalle::where('id_producto',$request->input('id_cliente'))->get();
         $quantity_accumulated = 0;
         foreach($detail as $element){
             $quantity_accumulated += $element['cantidad_kg'];
