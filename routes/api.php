@@ -47,3 +47,9 @@ Route::delete('/product/{id}', 'ProductoController@destroy');
 Route::get('/product_users/users/{id}', 'ProductoUsersController@show_user_product');
 Route::get('/product_users/product/{id}', 'ProductoUsersController@show_product_user');
 Route::post('/product_users', 'ProductoUsersController@create');
+//Plantas
+Route::get('/plant/{id}', 'PlantaController@show');
+Route::get('/plant', 'PlantaController@show_all');
+Route::post('/plant', 'PlantaController@create');
+Route::put('/plant/{id}', 'PlantaController@update');
+Route::delete('/plant/{id}', 'PlantaController@destroy');
