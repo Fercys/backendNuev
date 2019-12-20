@@ -18,7 +18,6 @@ class OrderController extends Controller
     /* Estructura de ejemplo, todos los campos son requeridos */
     /*
     {
-        "id":2, //Este es el id del contrato, necesario para la validacion
         "f_entrega_deseada":"11-12-2019",
         "id_producto":1,
         "cantidad_kg": 10,
@@ -40,7 +39,7 @@ class OrderController extends Controller
         if(empty($contract)){
             return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto']);
         } */
-        $contract_user = Contrato::where('id_user',$request->input('id_cliente'))->get();
+        $contract_user = Contrato::where('id_user',$request->input('id_cliente'))->orderBy('id', 'asc')->get();
         foreach ($contract_user as $key => $value) {
             $aux = ContratoProducto::where([
                 ['id_contrato','=',$value['id']],
@@ -54,11 +53,17 @@ class OrderController extends Controller
         if(!isset($contract)){
             return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto o usuario']);
         }
-        $detail = Detalle::where('id_producto',$request->input('id_cliente'))->get();
+        $header = Encabezado::where('id_contrato',$contract['id_contrato'])->get();        
         $quantity_accumulated = 0;
-        foreach($detail as $element){
-            $quantity_accumulated += $element['cantidad_kg'];
-        }return $detail;
+        foreach($header as $element){
+            $detail = Detalle::where([
+                ['id_pedido','=',$element['id']],
+                ['id_producto','=',$request->input('id_producto')]
+            ])->first();
+            if(!empty($detail)){
+                $quantity_accumulated += $detail['cantidad_kg'];
+            }            
+        }
         $quantity_accumulated += $request->input('cantidad_kg'); 
         return $contract['kilos'] >= $quantity_accumulated  ? 
             response()->json(['Status' => 'Success', 'Value' => $this->insert_order($request->all(),$contract)]) : 
@@ -123,14 +128,14 @@ class OrderController extends Controller
         $header->destroy($request->route('id'));
         return response()->json(['Status' => 'Success', 'Value' => 'Registro Eliminado']);        
     }
-    private function insert_order($data){
+    private function insert_order($data,$contract){
         $detail = new Detalle;
-        $contract = Contrato::where('id',$data['id'])->first();
         $header = new Encabezado;
         //@italo: Header Insert
         $header->id_cliente = $data['id_cliente'];
         $header->f_entrega_deseada = new Carbon($data['f_entrega_deseada']);
         $header->f_creacion = Carbon::now();
+        $header->id_contrato = $contract['id_contrato'];
         $header->save();
         //@italo: Detail Insert
         $detail->id_pedido = $header->id;
