@@ -18,7 +18,7 @@ class PlantaController extends Controller
     {
         $plant  = new Planta;
         $plant->nombre = $request->input('nombre');
-        $plant->direccion = $request->input('nombre');
+        $plant->direccion = $request->input('direccion');
         $plant->save();      
         return response()->json(['Status' => 'Success', 'Value' => $plant]);
     }    

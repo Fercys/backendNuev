@@ -53,3 +53,12 @@ Route::get('/plant', 'PlantaController@show_all');
 Route::post('/plant', 'PlantaController@create');
 Route::put('/plant/{id}', 'PlantaController@update');
 Route::delete('/plant/{id}', 'PlantaController@destroy');
+//Plantas Productos
+Route::get('/plant_product/{id}', 'PlantaProductoController@show');
+Route::get('/plant_product', 'PlantaProductoController@show_all');
+Route::post('/plant_product', 'PlantaProductoController@create');
+Route::put('/plant_product/{id}', 'PlantaProductoController@update');
+Route::delete('/plant_product/{id}', 'PlantaProductoController@destroy');
+
+Route::get('/plant_product/plant/{id}', 'PlantaProductoController@show_plant_product');
+Route::get('/plant_product/product/{id}', 'PlantaProductoController@show_product_plant');
