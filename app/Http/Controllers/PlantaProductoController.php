@@ -32,7 +32,11 @@ class PlantaProductoController extends Controller
     /*  Crea una relacion de la planta con un producto   */
     public function create(Request $request){
         $data_request = $request->all();
-        foreach ($data_request as $key => $value) {
+        $validate_date_range = $this->compare_date($data_request);
+        if($validate_date_range != false){
+           return $validate_date_range; 
+        }
+        foreach ($data_request as $key => $value) {            
             $plant_producto  = new PlantaProducto;
             $plant_producto->id_producto = $value['id_producto'];
             $plant_producto->id_planta = $value['id_planta'];
@@ -53,6 +57,10 @@ class PlantaProductoController extends Controller
     public function show_all(Request $request)
     {   
         $plant_producto = PlantaProducto::all();
+        foreach ($plant_producto as $key => $value) {
+            $plant_producto[$key]['producto'] = Producto::find($value['id_producto']);
+            $plant_producto[$key]['planta'] = Producto::find($value['id_planta']);
+        }
         return response()->json(['Status' => 'Success', 'Value' => $plant_producto]);
     }
     /*@italo: Actulizacion de Contratos*/
@@ -67,8 +75,8 @@ class PlantaProductoController extends Controller
     public function update(Request $request)
     {
         $data_request = $request->all();        
-        if(isset($data_request)){   //Actualizacion al contrato, de solicitarse
-            $plant_producto  = new PlantaProducto;
+        if(isset($data_request)){
+            $plant_producto  = new PlantaProducto;                    
             $plant_producto->where('id', $request->route('id'))->update($data_request);            
         }
         return response()->json(['Status' => 'Success', 'Value' => 'Registro Actualizado']);           
@@ -116,5 +124,31 @@ class PlantaProductoController extends Controller
         }      
         $response = (object) array('producto'=>$product,'plantas'=>$plant);
         return response()->json(['Status' => 'Success', 'Value' =>$response]);
+    }
+    private function compare_date($data_request){
+        foreach ($data_request as $key => $value) {
+            $plant_producto_compare  = PlantaProducto::where(['id_producto'=>$value['id_producto'],'id_planta'=>$value['id_planta']])->get();
+            if(count($plant_producto_compare) != 0){
+                $date_desde_request = Carbon::create($value['date_desde']);
+                $date_hasta_request = Carbon::create($value['date_hasta']);
+                foreach ($plant_producto_compare as $key2 => $value2) {
+                    $date_desde_db = Carbon::create($value2['date_desde']);
+                    $date_hasta_db = Carbon::create($value2['date_hasta']);
+                    if($date_desde_db->lessThanOrEqualTo($date_desde_request) && $date_hasta_db->greaterThanOrEqualTo($date_desde_request)){
+                        $response = 'No se puede ingresar una fecha dentro del rango ingresado. Intervalo: '.$value2['date_desde'].' - '.$value2['date_hasta'].' Fecha ingresada: '.$value['date_desde'];
+                        return response()->json(['Status' => 'Error', 'Value' => $response]);
+                    }
+                    if($date_desde_db->lessThanOrEqualTo($date_hasta_request) && $date_hasta_db->greaterThanOrEqualTo($date_hasta_request)){
+                        $response = 'No se puede ingresar una fecha dentro del rango ingresado. Intervalo: '.$value2['date_desde'].' - '.$value2['date_hasta'].' Fecha ingresada: '.$value['date_hasta'];
+                        return response()->json(['Status' => 'Error', 'Value' => $response]);
+                    }
+                    if($date_desde_request->lessThanOrEqualTo($date_desde_db) && $date_hasta_request->greaterThanOrEqualTo($date_hasta_db)){
+                        $response = 'No se puede ingresar una fecha dentro del rango ingresado. Intervalo: '.$value2['date_desde'].' - '.$value2['date_hasta'].' Fecha ingresada inferior: '.$value['date_desde'].' Fecha ingresada superior: '.$value['date_hasta'];
+                        return response()->json(['Status' => 'Error', 'Value' => $response]);
+                    }                         
+                }
+            }
+        }
+        return false;                  
     }
 }

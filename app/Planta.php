@@ -10,4 +10,7 @@ class Planta extends Model
     protected $fillable = [
         'nombre','direccion'
     ];
+    public function producto() {
+        return $this->hasMany(PlantaProducto::class);
+    }
 }
