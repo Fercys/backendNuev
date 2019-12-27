@@ -52,6 +52,8 @@ class PlantaProductoController extends Controller
     public function show(Request $request)
     {
         $plant_producto = PlantaProducto::where('id',$request->route('id'))->first();
+        $plant_producto['date_desde'] = Carbon::parse($plant_producto['date_desde'])->format('d/m/Y');
+        $plant_producto['date_hasta'] = Carbon::parse($plant_producto['date_hasta'])->format('d/m/Y');
         return response()->json(['Status' => 'Success', 'Value' => $plant_producto]);
     }
     /*@italo: Solicitud de todos las PlantaProductos*/
