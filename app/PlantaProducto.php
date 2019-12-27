@@ -10,9 +10,9 @@ class PlantaProducto extends Model
         'id_producto','id_planta','cantidad_kg','date_desde','date_hasta'
     ];
     public function producto() {
-        return $this->hasMany(Producto::class,'id');
+        return $this->hasMany(Producto::class,'id','id_producto');
     }
     public function planta() {
-        return $this->hasMany(Planta::class,'id');
+        return $this->hasMany(Planta::class,'id','id_planta');
     }
 }

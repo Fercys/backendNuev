@@ -8,6 +8,7 @@ use App\PlantaProducto;
 use App\Producto;
 use App\Planta;
 use Carbon\Carbon;
+use App\Http\Resources\plantaproductocollection;
 
 class PlantaProductoController extends Controller
 {
@@ -53,10 +54,12 @@ class PlantaProductoController extends Controller
         $plant_producto = PlantaProducto::where('id',$request->route('id'))->first();
         return response()->json(['Status' => 'Success', 'Value' => $plant_producto]);
     }
-    /*@italo: Solicitud de todos los ContratosProductos*/
+    /*@italo: Solicitud de todos las PlantaProductos*/
     public function show_all(Request $request)
     {   
         $plant_producto = PlantaProducto::all();
+        /*test */        
+        //return response()->json(['Status' => 'Success', 'Value' => plantaproductocollection::collection($plant_producto)]);
         foreach ($plant_producto as $key => $value) {
             $plant_producto[$key]['producto'] = Producto::find($value['id_producto']);
             $plant_producto[$key]['planta'] = Producto::find($value['id_planta']);
@@ -125,12 +128,12 @@ class PlantaProductoController extends Controller
         $response = (object) array('producto'=>$product,'plantas'=>$plant);
         return response()->json(['Status' => 'Success', 'Value' =>$response]);
     }
-    private function compare_date($data_request){
+    private function compare_date($data_request,$id = null){
         foreach ($data_request as $key => $value) {
             $plant_producto_compare  = PlantaProducto::where(['id_producto'=>$value['id_producto'],'id_planta'=>$value['id_planta']])->get();
             if(count($plant_producto_compare) != 0){
                 $date_desde_request = Carbon::create($value['date_desde']);
-                $date_hasta_request = Carbon::create($value['date_hasta']);
+                $date_hasta_request = Carbon::create($value['date_hasta']);               
                 foreach ($plant_producto_compare as $key2 => $value2) {
                     $date_desde_db = Carbon::create($value2['date_desde']);
                     $date_hasta_db = Carbon::create($value2['date_hasta']);
