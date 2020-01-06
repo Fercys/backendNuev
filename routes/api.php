@@ -62,3 +62,6 @@ Route::delete('/plant_product/{id}', 'PlantaProductoController@destroy');
 
 Route::get('/plant_product/plant/{id}', 'PlantaProductoController@show_plant_product');
 Route::get('/plant_product/product/{id}', 'PlantaProductoController@show_product_plant');
+
+//Agrotop
+Route::post('/agrotop', 'AgrotopController@secure');
