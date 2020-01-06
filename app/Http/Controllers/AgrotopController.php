@@ -13,14 +13,21 @@ class AgrotopController extends Controller
     public function secure(Request $request){
         $card_code = $request->input('card_code');
         $client = new \GuzzleHttp\Client();
-        $request = $client->request('POST', 'http://agrotopapi.empresasagrotop.cl/api/login/authenticate', [
-            'json' => array(
+        $request = $client->post('http://agrotopapi.empresasagrotop.cl/api/login/authenticate', [
+            'form_params' => array(
                 "Username"=>$this->user,
                 "Password"=>$this->password
             )
         ]);
         if($request->getStatusCode() == 200){
-            return response()->json(['Status' => 'Success', 'Value' =>$request->getBody()]);
+            $url = 'http://agrotopapi.empresasagrotop.cl/api/FichasTecnicas/GetFichasTecnicas?id='.$card_code;
+            //$client->setDefaultOption('header', array('Authorization' => 'Bearer '.(string)$request->getBody()));
+            $request = $client->get($url,[
+                'headers' => [
+                    'Authorization' => 'Bearer'.str_replace("\""," ",(string)$request->getBody())
+                ]
+            ]); 
+            return response()->json(['Status' => 'Success', 'Value' =>(string)$request->getBody()]);
         }else{
             return response()->json(['Error' => 'Success', 'Value' =>'Problema con la api, codigo de error: '.$request->getStatusCode()]);   
         }       
