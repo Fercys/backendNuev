@@ -26,8 +26,8 @@ class AgrotopController extends Controller
                 'headers' => [
                     'Authorization' => 'Bearer'.str_replace("\""," ",(string)$request->getBody())
                 ]
-            ]); 
-            return response()->json(['Status' => 'Success', 'Value' =>(string)$request->getBody()]);
+            ]);
+            return response()->json(['Status' => 'Success', 'Value' =>json_decode($request->getBody()->getContents())]);
         }else{
             return response()->json(['Error' => 'Success', 'Value' =>'Problema con la api, codigo de error: '.$request->getStatusCode()]);   
         }       
