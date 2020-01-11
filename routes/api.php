@@ -64,4 +64,10 @@ Route::get('/plant_product/plant/{id}', 'PlantaProductoController@show_plant_pro
 Route::get('/plant_product/product/{id}', 'PlantaProductoController@show_product_plant');
 
 //Agrotop
-Route::post('/agrotop', 'AgrotopController@secure');
+Route::get('/agrotop/{id}', 'AgrotopController@show');
+Route::get('/agrotop', 'AgrotopController@show_all');
+Route::post('/agrotop', 'AgrotopController@create');
+Route::put('/agrotop/{id}', 'AgrotopController@update');
+Route::delete('/agrotop/{id}', 'AgrotopController@destroy');
+
+Route::post('/agrotop_get_api', 'AgrotopController@secure');
