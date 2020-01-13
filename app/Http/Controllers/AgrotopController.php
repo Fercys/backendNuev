@@ -82,6 +82,36 @@ class AgrotopController extends Controller
             return response()->json(['Error' => 'Success', 'Value' =>'Problema con la api, codigo de error: '.$request->getStatusCode()]);   
         }        
     }
+    public function show(Request $request)
+    {
+        $agrotop = Agrotop::where('id',$request->route('id'))->first();
+        $agrotop['Sacos'] = Sacos::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisisPesticida'] = ParametroAnalisisPesticida::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisisMetalesPesados'] = ParametroAnalisisMetalesPesados::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisis'] = ParametroAnalisis::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisisMicotoxinas'] = ParametroAnalisisMicotoxinas::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisisMicrobiologia'] = ParametroAnalisisMicrobiologia::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ParametroAnalisisNutricionales'] = ParametroAnalisisNutricionales::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['FrecuenciaAnalisis'] = FrecuenciaAnalisis::where('id_agrotop',$request->route('id'))->get();
+        $agrotop['ControlVersion'] = ControlVersion::where('id_agrotop',$request->route('id'))->get();
+        return response()->json($agrotop);
+    }
+    public function show_all(Request $request)
+    {
+        $agrotop = Agrotop::all();
+        foreach ($agrotop as $key => $value) {
+            $agrotop[$key]['Sacos'] = Sacos::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisisPesticida'] = ParametroAnalisisPesticida::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisisMetalesPesados'] = ParametroAnalisisMetalesPesados::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisis'] = ParametroAnalisis::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisisMicotoxinas'] = ParametroAnalisisMicotoxinas::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisisMicrobiologia'] = ParametroAnalisisMicrobiologia::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ParametroAnalisisNutricionales'] = ParametroAnalisisNutricionales::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['FrecuenciaAnalisis'] = FrecuenciaAnalisis::where('id_agrotop',$value['id'])->get();
+            $agrotop[$key]['ControlVersion'] = ControlVersion::where('id_agrotop',$value['id'])->get();
+        }        
+        return response()->json($agrotop);
+    }
     public function destroy(Request $request)
     {
         $agrotop  = new Agrotop;
