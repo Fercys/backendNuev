@@ -4,7 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Agrotop;
-use DB;
+use App\Sacos;
+use App\ParametroAnalisis;
+use App\ParametroAnalisisPesticida;
+use App\ParametroAnalisisMetalesPesados;
+use App\ParametroAnalisisMicotoxinas;
+use App\ParametroAnalisisMicrobiologia;
+use App\ParametroAnalisisNutricionales;
+use App\FrecuenciaAnalisis;
+use App\ControlVersion;
 
 class AgrotopController extends Controller
 {
@@ -51,19 +59,34 @@ class AgrotopController extends Controller
                     'Authorization' => 'Bearer'.str_replace("\""," ",(string)$request->getBody())
                 ]
             ]);
-            $data = json_decode($request->getBody()->getContents());
-            foreach ($data as $key => $value) { 
+            $data = json_decode($request->getBody()->getContents()); 
+            foreach ($data as $key => $value) {
                 $validate = Agrotop::where('IdFichaTecnica',$value->IdFichaTecnica)->first();
                 if($validate != null){
                     return json_encode(['Error' => 'Error', 'Value' =>'Id de ficha tecnica repetido: '.$validate->IdFichaTecnica]);
                 }
                 $id_save = $this->save_agrotop_main_table($value,$id_user);
+                $this->save_agrotop_sacos_table($value->Sacos,$id_save->id);
+                $this->save_agrotop_analisisParametros_table($value->ParametroAnalisis,$id_save->id);
+                $this->save_agrotop_analisisParametrosPesticida_table($id_save->id);
+                $this->save_agrotop_controlVersion_table($id_save->id);
+                $this->save_agrotop_frecuenciaAnalisis_table($id_save->id);
+                $this->save_agrotop_analisisParametrosMetalesPesados_table($value->ParametroAnalisisMetalesPesados,$id_save->id);
+                $this->save_agrotop_analisisParametrosMicotoxinas_table($value->ParametroAnalisisMicotoxinas,$id_save->id);
+                $this->save_agrotop_analisisParametrosMicrobiologia_table($value->ParametroAnalisisMicrobiologia,$id_save->id);
+                $this->save_agrotop_analisisParametrosNutricionales_table($value->ParametroAnalisisNutricionales,$id_save->id);               
             }
             return response()->json(['Status' => 'Success', 'Value' =>'Registro guardado con exito']);
             //return response()->json(['Status' => 'Success', 'Value' =>json_decode($request->getBody()->getContents())]);
         }else{
             return response()->json(['Error' => 'Success', 'Value' =>'Problema con la api, codigo de error: '.$request->getStatusCode()]);   
         }        
+    }
+    public function destroy(Request $request)
+    {
+        $agrotop  = new Agrotop;
+        $agrotop->destroy($request->route('id'));
+        return response()->json(['Status' => 'Success', 'Value' => 'Registro Eliminado']);        
     }
     private function save_agrotop_main_table($value,$id_user){
         $agrotop = new Agrotop;
@@ -88,5 +111,98 @@ class AgrotopController extends Controller
         $agrotop->id_user = $id_user;
         $agrotop->save();        
         return $agrotop;
+    }
+    private function save_agrotop_sacos_table($sacos,$id_agrotop){
+        foreach ($sacos as $key => $value) {
+            $sacos = new Sacos;
+            $sacos->ColorHilo = $value->ColorHilo;
+            $sacos->Descripcion = $value->Descripcion;
+            $sacos->IdSaco = $value->IdSaco;
+            $sacos->Nombre = $value->Nombre;
+            $sacos->Peso = $value->Peso;
+            $sacos->id_agrotop = $id_agrotop;
+            $sacos->save();
+        }
+    }
+    private function save_agrotop_analisisParametros_table($parametroAnalisis,$id_agrotop){
+        foreach ($parametroAnalisis as $key => $value) {
+            $parametroAnalisis = new ParametroAnalisis;
+            $parametroAnalisis->IdParametroAnalisis = $value->IdParametroAnalisis;
+            $parametroAnalisis->MaxValidValue = $value->MaxValidValue;
+            $parametroAnalisis->MinValidValue = $value->MinValidValue;
+            $parametroAnalisis->Nombre = $value->Nombre;
+            $parametroAnalisis->Nombre_en = $value->Nombre_en;
+            $parametroAnalisis->UM = $value->UM;
+            $parametroAnalisis->UM_en = $value->UM_en;
+            $parametroAnalisis->id_agrotop = $id_agrotop;
+            $parametroAnalisis->save();
+        }
+    }
+    private function save_agrotop_analisisParametrosPesticida_table($id_agrotop){
+        $parametroAnalisisPesticida = new ParametroAnalisisPesticida;
+        $parametroAnalisisPesticida->id_agrotop = $id_agrotop;
+        $parametroAnalisisPesticida->save();
+    }
+    private function save_agrotop_controlVersion_table($id_agrotop){
+        $parametroAnalisisPesticida = new ControlVersion;
+        $parametroAnalisisPesticida->id_agrotop = $id_agrotop;
+        $parametroAnalisisPesticida->save();
+    }
+    private function save_agrotop_frecuenciaAnalisis_table($id_agrotop){
+        $parametroAnalisisPesticida = new FrecuenciaAnalisis;
+        $parametroAnalisisPesticida->id_agrotop = $id_agrotop;
+        $parametroAnalisisPesticida->save();
+    }
+    private function save_agrotop_analisisParametrosMetalesPesados_table($parametroAnalisisMetalesPesados,$id_agrotop){
+        foreach ($parametroAnalisisMetalesPesados as $key => $value) {
+            $parametroAnalisisMetalesPesados = new ParametroAnalisisMetalesPesados;
+            $parametroAnalisisMetalesPesados->MaxValidValue = $value->MaxValidValue;
+            $parametroAnalisisMetalesPesados->MinValidValue = $value->MinValidValue;
+            $parametroAnalisisMetalesPesados->Nombre = $value->Nombre;
+            $parametroAnalisisMetalesPesados->Nombre_en = $value->Nombre_en;
+            $parametroAnalisisMetalesPesados->UM = $value->UM;
+            $parametroAnalisisMetalesPesados->UM_en = $value->UM_en;
+            $parametroAnalisisMetalesPesados->id_agrotop = $id_agrotop;
+            $parametroAnalisisMetalesPesados->save();
+        }
+    }
+    private function save_agrotop_analisisParametrosMicotoxinas_table($parametroAnalisisMetalesPesados,$id_agrotop){
+        foreach ($parametroAnalisisMetalesPesados as $key => $value) {
+            $parametroAnalisisMetalesPesados = new ParametroAnalisisMicotoxinas;
+            $parametroAnalisisMetalesPesados->MaxValidValue = $value->MaxValidValue;
+            $parametroAnalisisMetalesPesados->MinValidValue = $value->MinValidValue;
+            $parametroAnalisisMetalesPesados->Nombre = $value->Nombre;
+            $parametroAnalisisMetalesPesados->Nombre_en = $value->Nombre_en;
+            $parametroAnalisisMetalesPesados->UM = $value->UM;
+            $parametroAnalisisMetalesPesados->UM_en = $value->UM_en;
+            $parametroAnalisisMetalesPesados->id_agrotop = $id_agrotop;
+            $parametroAnalisisMetalesPesados->save();
+        }
+    }
+    private function save_agrotop_analisisParametrosMicrobiologia_table($parametroAnalisisMetalesPesados,$id_agrotop){
+        foreach ($parametroAnalisisMetalesPesados as $key => $value) {
+            $parametroAnalisisMetalesPesados = new ParametroAnalisisMicrobiologia;
+            $parametroAnalisisMetalesPesados->MaxValidValue = $value->MaxValidValue;
+            $parametroAnalisisMetalesPesados->MinValidValue = $value->MinValidValue;
+            $parametroAnalisisMetalesPesados->Nombre = $value->Nombre;
+            $parametroAnalisisMetalesPesados->Nombre_en = $value->Nombre_en;
+            $parametroAnalisisMetalesPesados->UM = $value->UM;
+            $parametroAnalisisMetalesPesados->UM_en = $value->UM_en;
+            $parametroAnalisisMetalesPesados->id_agrotop = $id_agrotop;
+            $parametroAnalisisMetalesPesados->save();
+        }
+    }
+    private function save_agrotop_analisisParametrosNutricionales_table($parametroAnalisisMetalesPesados,$id_agrotop){
+        foreach ($parametroAnalisisMetalesPesados as $key => $value) {
+            $parametroAnalisisMetalesPesados = new ParametroAnalisisNutricionales;
+            $parametroAnalisisMetalesPesados->MaxValidValue = $value->MaxValidValue;
+            $parametroAnalisisMetalesPesados->MinValidValue = $value->MinValidValue;
+            $parametroAnalisisMetalesPesados->Nombre = $value->Nombre;
+            $parametroAnalisisMetalesPesados->Nombre_en = $value->Nombre_en;
+            $parametroAnalisisMetalesPesados->UM = $value->UM;
+            $parametroAnalisisMetalesPesados->UM_en = $value->UM_en;
+            $parametroAnalisisMetalesPesados->id_agrotop = $id_agrotop;
+            $parametroAnalisisMetalesPesados->save();
+        }
     }
 }
