@@ -33,12 +33,7 @@ class CreateAgrotopsTable extends Migration
             $table->boolean('VerificacionCliente');
             $table->integer('Version');
             $table->integer('VidaUtil');
-            $table->unsignedBigInteger('id_user')->unsigned();
-            $table->foreign('id_user')
-            ->references('id')
-            ->on('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->string('id_user');
             $table->timestamps();
         });
     }
