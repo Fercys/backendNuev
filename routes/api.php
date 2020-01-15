@@ -71,3 +71,24 @@ Route::put('/agrotop/{id}', 'AgrotopController@update');
 Route::delete('/agrotop/{id}', 'AgrotopController@destroy');
 
 Route::post('/agrotop_get_api', 'AgrotopController@secure');
+
+//Puertos
+Route::get('/puerto/{id}', 'PuertosController@show');
+Route::get('/puerto', 'PuertosController@show_all');
+Route::post('/puerto', 'PuertosController@create');
+Route::put('/puerto/{id}', 'PuertosController@update');
+Route::delete('/puerto/{id}', 'PuertosController@destroy');
+
+//Navieras
+Route::get('/naviera/{id}', 'NavierasController@show');
+Route::get('/naviera', 'NavierasController@show_all');
+Route::post('/naviera', 'NavierasController@create');
+Route::put('/naviera/{id}', 'NavierasController@update');
+Route::delete('/naviera/{id}', 'NavierasController@destroy');
+
+//Puertos Navieras
+Route::get('/naviera_puerto/{id}', 'PuertosNavierasController@show');
+Route::get('/naviera_puerto', 'PuertosNavierasController@show_all');
+Route::post('/naviera_puerto', 'PuertosNavierasController@create');
+Route::put('/naviera_puerto/{id}', 'PuertosNavierasController@update');
+Route::delete('/naviera_puerto/{id}', 'PuertosNavierasController@destroy');
