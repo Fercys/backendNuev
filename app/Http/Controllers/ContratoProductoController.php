@@ -39,7 +39,6 @@ class ContratoProductoController extends Controller
         $contract  = new Contrato;
         $contract->f_inicio = new Carbon($data_request['contract']['f_inicio']);
         $contract->f_final = new Carbon($data_request['contract']['f_final']);
-        $contract->id_user = $data_request['contract']['id_user'];
         $contract->save();
         //Agrega la relacion de contrato con productos
         $register = array();
