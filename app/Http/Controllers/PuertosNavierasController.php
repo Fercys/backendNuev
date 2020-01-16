@@ -14,16 +14,21 @@ class PuertosNavierasController extends Controller
     } */ 
     public function create(Request $request)
     {
-        $naviera_puerto_validate = Naviera_Puertos::where(['id_naviera'=>$request->input('id_naviera'),'id_puerto'=>$request->input('id_puerto')])->first();
-        if($naviera_puerto_validate != null){
-            return response()->json(['Status' => 'Error', 'Value' => 'registro repetido']);
-        };
-        $naviera_puerto  = new Naviera_Puertos;
-        $naviera_puerto->id_naviera = $request->input('id_naviera');
-        $naviera_puerto->id_puerto = $request->input('id_puerto');
-        $naviera_puerto->dias = $request->input('dias');
-        $naviera_puerto->save();      
-        return response()->json(['Status' => 'Success', 'Value' => $naviera_puerto]);
+        $array_element = $request->all();
+        foreach ($array_element as $key => $value) {
+            $naviera_puerto_validate = Naviera_Puertos::where(['id_naviera'=>$value['id_naviera'],'id_puerto'=>$value['id_puerto']])->first();
+            if($naviera_puerto_validate != null){
+                return response()->json(['Status' => 'Error', 'Value' => 'registro repetido','Register'=>$naviera_puerto_validate]);
+            }
+        }
+        foreach ($array_element as $key => $value) {
+            $naviera_puerto  = new Naviera_Puertos;
+            $naviera_puerto->id_naviera = $value['id_naviera'];
+            $naviera_puerto->id_puerto = $value['id_puerto'];
+            $naviera_puerto->dias = $value['dias'];
+            $naviera_puerto->save(); 
+        }             
+        return response()->json(['Status' => 'Success', 'Value' => 'Registros Agregados']);
     }    
     /*@italo: Solicitud de Productos*/
     public function show(Request $request)
