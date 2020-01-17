@@ -50,21 +50,24 @@ class OrderController extends Controller
                 break;
             }
         }
-        if(!isset($contract)){
-            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto o usuario']);
-        }
-        $header = Encabezado::where('id_contrato',$contract['id_contrato'])->get();        
         $quantity_accumulated = 0;
-        foreach($header as $element){
-            $detail = Detalle::where([
-                ['id_pedido','=',$element['id']],
-                ['id_producto','=',$request->input('id_producto')]
-            ])->first();
-            if(!empty($detail)){
-                $quantity_accumulated += $detail['cantidad_kg'];
-            }            
-        }
-        $quantity_accumulated += $request->input('cantidad_kg'); 
+        if(isset($contract)){
+            //return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto o usuario']);
+            $header = Encabezado::where('cliente_id',$request->input('cliente_id'))->get();        
+            
+            foreach($header as $element){
+                $detail = Detalle::where([
+                    ['id_pedido','=',$element['id']],
+                    ['id_producto','=',$request->input('id_producto')]
+                ])->first();
+                if(!empty($detail)){
+                    $quantity_accumulated += $detail['cantidad_kg'];
+                }            
+            }
+            $quantity_accumulated += $request->input('cantidad_kg');
+        }else{
+            $contract['kilos'] = 1;   
+        }        
         return $contract['kilos'] >= $quantity_accumulated  ? 
             response()->json(['Status' => 'Success', 'Value' => $this->insert_order($request->all(),$contract)]) : 
             response()->json(['Status' => 'Error', 'Value' => 'Valor no debe sobre pasar los '.$contract['kilos'].' kilos']);        
@@ -135,7 +138,6 @@ class OrderController extends Controller
         $header->cliente_id = $data['cliente_id'];
         $header->f_entrega_deseada = new Carbon($data['f_entrega_deseada']);
         $header->f_creacion = Carbon::now();
-        $header->id_contrato = $contract['id_contrato'];
         $header->save();
         //@italo: Detail Insert
         $detail->id_pedido = $header->id;

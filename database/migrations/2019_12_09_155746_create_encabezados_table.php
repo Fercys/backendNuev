@@ -16,12 +16,6 @@ class CreateEncabezadosTable extends Migration
         Schema::create('encabezados', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('cliente_id');
-            $table->unsignedBigInteger('id_contrato');
-            $table->foreign('id_contrato')
-                ->references('id')
-                ->on('contratos')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
             $table->date('f_entrega_deseada')->nullable();
             $table->date('f_creacion')->nullable();
             $table->timestamps();
