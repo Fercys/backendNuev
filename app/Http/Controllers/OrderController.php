@@ -21,7 +21,7 @@ class OrderController extends Controller
         "f_entrega_deseada":"11-12-2019",
         "id_producto":1,
         "cantidad_kg": 10,
-        "id_cliente":1
+        "cliente_id":1
     }
     */ 
     public function create(Request $request)
@@ -39,7 +39,7 @@ class OrderController extends Controller
         if(empty($contract)){
             return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto']);
         } */
-        $contract_user = Contrato::where('id_user',$request->input('id_cliente'))->orderBy('id', 'asc')->get();
+        $contract_user = Contrato::where('cliente_id',$request->input('cliente_id'))->orderBy('id', 'asc')->get();
         foreach ($contract_user as $key => $value) {
             $aux = ContratoProducto::where([
                 ['id_contrato','=',$value['id']],
@@ -132,7 +132,7 @@ class OrderController extends Controller
         $detail = new Detalle;
         $header = new Encabezado;
         //@italo: Header Insert
-        $header->id_cliente = $data['id_cliente'];
+        $header->cliente_id = $data['cliente_id'];
         $header->f_entrega_deseada = new Carbon($data['f_entrega_deseada']);
         $header->f_creacion = Carbon::now();
         $header->id_contrato = $contract['id_contrato'];

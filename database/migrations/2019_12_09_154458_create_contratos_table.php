@@ -17,6 +17,7 @@ class CreateContratosTable extends Migration
             $table->bigIncrements('id');
             $table->date('f_inicio')->nullable();
             $table->date('f_final')->nullable();
+            $table->integer('cliente_id');
             $table->timestamps();
         });
     }

@@ -35,6 +35,7 @@ class ContractController extends Controller
         try{
             $contract->f_inicio = new Carbon($data_request['contract']['f_inicio']);
             $contract->f_final = new Carbon($data_request['contract']['f_final']);
+            $contract->f_final = new Carbon($data_request['contract']['cliente_id']);
             $contract->save();               
         }catch(Exception $e){
             return response()->json(['Status' => 'Error', 'Value' => $e]);
