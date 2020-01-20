@@ -15,6 +15,11 @@ class CreateEncabezadosTable extends Migration
     {
         Schema::create('encabezados', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->boolean('autorizado')->default(false);
+            $table->integer('nro_sap')->default(0);
+            $table->integer('op')->default(0);
+            $table->integer('proforma')->default(0);
+            $table->integer('reserva')->default(0);
             $table->unsignedBigInteger('id_cliente');
             $table->foreign('id_cliente')
                 ->references('id')
