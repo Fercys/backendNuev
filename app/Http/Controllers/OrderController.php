@@ -95,14 +95,16 @@ class OrderController extends Controller
         }
         return response()->json(['Status' => 'Success', 'Value' => $response]);    
     }
-    public function show_all_restrict(Request $request)
-    {   
+    public function restrict_show_all(Request $request)
+    {
         $header = Encabezado::all();
         $response = array();
         foreach($header as $element){
             $detail = Detalle::where('id_pedido', $element['id'])->first();
-            $product = Producto::where('id', $detail['id_producto'])->first(); 
-            $element_array_insert = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product);
+            $product = Producto::where('id', $detail['id_producto'])->first();
+             $element['autorizado'] == 1 ? $object = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product) :
+             $object = (object) array('Encabezado'=>$element);
+            $element_array_insert = $object;
             array_push($response,$element_array_insert);
             unset($contract_product); unset($product);
         }

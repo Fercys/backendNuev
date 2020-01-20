@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $fillable = [
-        'detalle'
+        'detalle','precio'
     ];
     public function planta() {
         return $this->hasMany(PlantaProducto::class,'id');
