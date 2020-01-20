@@ -20,18 +20,7 @@ class CreateEncabezadosTable extends Migration
             $table->integer('op')->default(0);
             $table->integer('proforma')->default(0);
             $table->integer('reserva')->default(0);
-            $table->unsignedBigInteger('id_cliente');
-            $table->foreign('id_cliente')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->unsignedBigInteger('id_contrato');
-            $table->foreign('id_contrato')
-                ->references('id')
-                ->on('contratos')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->integer('cliente_id');
             $table->date('f_entrega_deseada')->nullable();
             $table->date('f_creacion')->nullable();
             $table->timestamps();

@@ -19,15 +19,15 @@ class ContratoProductoController extends Controller
         "contract":{
             "f_inicio":"25-12-2019",
             "f_final":"27-12-2019",
-            "id_user": 1
+            "cliente_id": 1
         },
         "contract_product":[
             {
-                "id_producto":"1",
+                "id_producto":1,
                 "kilos":100
             },
             {
-                "id_producto":"2",
+                "id_producto":2,
                 "kilos":20
             }
         ]
@@ -39,7 +39,7 @@ class ContratoProductoController extends Controller
         $contract  = new Contrato;
         $contract->f_inicio = new Carbon($data_request['contract']['f_inicio']);
         $contract->f_final = new Carbon($data_request['contract']['f_final']);
-        $contract->id_user = $data_request['contract']['id_user'];
+        $contract->cliente_id = $data_request['contract']['cliente_id'];
         $contract->save();
         //Agrega la relacion de contrato con productos
         $register = array();
