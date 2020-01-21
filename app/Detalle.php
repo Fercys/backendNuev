@@ -10,6 +10,6 @@ class Detalle extends Model
         'id_pedido','id_producto','cantidad_kg','direccion_entrega',
         'ciudad_entrega','pais_entrega','moneda','pais_origen',
         'puerto_origen','pais_destino','puerto_destino',
-        'condicion_pago','agregar_icoterms'
+        'condicion_pago','agregar_icoterms','costo'
     ];
 }

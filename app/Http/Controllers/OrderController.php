@@ -9,7 +9,6 @@ use App\ContratoProducto;
 use App\Producto;
 use App\Detalle;
 use App\Encabezado;
-//use App\User;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -21,24 +20,12 @@ class OrderController extends Controller
         "f_entrega_deseada":"11-12-2019",
         "id_producto":1,
         "cantidad_kg": 10,
-        "cliente_id":1
+        "cliente_id":1,
+        "costo":200
     }
     */ 
     public function create(Request $request)
     {   
-        /*if(Contrato::where([
-            ['id_user','=',$request->input('id_cliente')],
-            ['id','=',$request->input('id')]
-        ])->count() < 1){
-            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese usuario']);
-        }
-        $contract  = ContratoProducto::where([
-            ['id_contrato','=',$request->input('id')],
-            ['id_producto','=',$request->input('id_producto')]
-        ])->first();
-        if(empty($contract)){
-            return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto']);
-        } */
         $contract_user = Contrato::where('cliente_id',$request->input('cliente_id'))->orderBy('id', 'asc')->get();
         foreach ($contract_user as $key => $value) {
             $aux = ContratoProducto::where([
@@ -52,7 +39,6 @@ class OrderController extends Controller
         }
         $quantity_accumulated = 0;
         if(isset($contract)){
-            //return response()->json(['Status' => 'Error', 'Value' => 'No existe contrato relacionado con ese producto o usuario']);
             $header = Encabezado::where('cliente_id',$request->input('cliente_id'))->get();        
             
             foreach($header as $element){
@@ -171,6 +157,7 @@ class OrderController extends Controller
         $detail->id_pedido = $header->id;
         $detail->id_producto = $data['id_producto'];
         $detail->cantidad_kg = $data['cantidad_kg'];
+        $detail->costo = $data['costo'];
         $detail->save();
         return 'Register Done';
     }

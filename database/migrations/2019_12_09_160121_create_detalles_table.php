@@ -38,6 +38,7 @@ class CreateDetallesTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->integer('cantidad_kg')->nullable();
+            $table->integer('costo');
             $table->timestamps();
         });
     }
