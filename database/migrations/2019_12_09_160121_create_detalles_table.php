@@ -15,16 +15,16 @@ class CreateDetallesTable extends Migration
     {
         Schema::create('detalles', function (Blueprint $table) {
             $table->bigIncrements('id');            
-            $table->string('direccion_entrega');
-            $table->string('ciudad_entrega');
-            $table->string('pais_entrega');
-            $table->string('moneda');
-            $table->string('pais_origen');
-            $table->string('puerto_origen');
-            $table->string('pais_destino');
-            $table->string('puerto_destino');
-            $table->string('condicion_pago');
-            $table->string('agregar_icoterms');            
+            $table->string('direccion_entrega')->default("");
+            $table->string('ciudad_entrega')->default("");
+            $table->string('pais_entrega')->default("");
+            $table->string('moneda')->default("");
+            $table->string('pais_origen')->default("");
+            $table->string('puerto_origen')->default("");
+            $table->string('pais_destino')->default("");
+            $table->string('puerto_destino')->default("");
+            $table->string('condicion_pago')->default("");
+            $table->string('agregar_icoterms')->default("");            
             $table->unsignedBigInteger('id_pedido')->unsigned();
             $table->foreign('id_pedido')
                 ->references('id')

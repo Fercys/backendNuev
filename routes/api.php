@@ -34,6 +34,7 @@ Route::get('/contract_product/product/{id}', 'ContratoProductoController@show_pr
 //Ordenes
 Route::get('/order/{id}', 'OrderController@show');
 Route::get('/order', 'OrderController@show_all');
+Route::get('/order/client/{id}', 'OrderController@show_client');
 Route::get('/order_restrict', 'OrderController@restrict_show_all');
 Route::post('/order', 'OrderController@create');
 Route::put('/order/{id}', 'OrderController@update');

@@ -95,6 +95,19 @@ class OrderController extends Controller
         }
         return response()->json(['Status' => 'Success', 'Value' => $response]);    
     }
+    public function show_client(Request $request)
+    {   
+        $header = Encabezado::where('cliente_id',$request->route('id'))->get();
+        $response = array();
+        foreach($header as $element){
+            $detail = Detalle::where('id_pedido', $element['id'])->first();
+            $product = Producto::where('id', $detail['id_producto'])->first(); 
+            $element_array_insert = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product);
+            array_push($response,$element_array_insert);
+            unset($contract_product); unset($product);
+        }
+        return response()->json(['Status' => 'Success', 'Value' => $response]);    
+    }
     public function restrict_show_all(Request $request)
     {
         $header = Encabezado::all();
