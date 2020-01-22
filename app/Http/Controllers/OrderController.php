@@ -137,6 +137,13 @@ class OrderController extends Controller
         }
         return response()->json(['Status' => 'Success', 'Value' => 'Registro Actualizado']);           
     }
+    public function detail_update(Request $request)
+    {
+        $data_request = $request->all();
+        $detail = Detalle::where('id',$request->route('id'))->update($data_request);
+        return response()->json(['Status' => 'Success', 'Value' => 'Registro Actualizado']);
+                  
+    }
     public function destroy(Request $request)
     {
         $detail = new Detalle;
