@@ -17,6 +17,7 @@ class ProductoController extends Controller
     public function create(Request $request)
     {
         $producto  = new Producto;
+        $producto->precio = $request->input('precio');
         $producto->detalle = $request->input('detalle');
         $producto->save();      
         return response()->json(['Status' => 'Success', 'Value' => $producto]);
