@@ -11,6 +11,7 @@ use App\Detalle;
 use App\Encabezado;
 use App\Reserva;
 use App\Naviera;
+use App\Proforma;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -119,8 +120,9 @@ class OrderController extends Controller
             $detail = Detalle::where('id_pedido', $element['id'])->first();
             $product = Producto::where('id', $detail['id_producto'])->first();
             $reserva = Reserva::where('id', $element['reserva'])->first();
+            $proforma = Proforma::where('id', $element['proforma'])->first();
             $naviera = Naviera::where('id', $reserva['id_naviera'])->first(); 
-            $element_array_insert = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product,'Naviera'=>$naviera);
+            $element_array_insert = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product,'Naviera'=>$naviera,'Proforma'=>$proforma);
             array_push($response,$element_array_insert);
             unset($contract_product); unset($product);
         }
