@@ -95,3 +95,10 @@ Route::get('/naviera_puerto', 'PuertosNavierasController@show_all');
 Route::post('/naviera_puerto', 'PuertosNavierasController@create');
 Route::put('/naviera_puerto/{id}', 'PuertosNavierasController@update');
 Route::delete('/naviera_puerto/{id}', 'PuertosNavierasController@destroy');
+
+//Proformas
+Route::get('/proforma/{id}', 'ProformaController@show');
+Route::get('/proforma', 'ProformaController@show_all');
+Route::post('/proforma', 'ProformaController@create');
+Route::put('/proforma/{id}', 'ProformaController@update');
+Route::delete('/proforma/{id}', 'ProformaController@destroy');
