@@ -18,7 +18,7 @@ class CreateReservasTable extends Migration
             $table->unsignedBigInteger('id_naviera')->unsigned();
             $table->foreign('id_naviera')
             ->references('id')
-            ->on('agrotops')
+            ->on('navieras')
             ->onDelete('cascade')
             ->onUpdate('cascade');
             $table->string('lote');

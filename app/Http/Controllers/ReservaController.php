@@ -15,16 +15,18 @@ class ReservaController extends Controller
     } */ 
     public function create(Request $request)
     {
-        $naviera  = new Reserva;
-        $naviera->nombre = $request->input('nombre');
-        $naviera->save();      
-        return response()->json(['Status' => 'Success', 'Value' => $naviera]);
+        $reserva  = new Reserva;
+        $reserva->id_naviera = $request->input('id_naviera');
+        $reserva->lote = $request->input('lote');
+        $reserva->nro_reserva = $request->input('nro_reserva');
+        $reserva->save();      
+        return response()->json(['Status' => 'Success', 'Value' => $reserva]);
     }    
     /*@italo: Solicitud de Productos*/
     public function show(Request $request)
     {
         return response()->json(['Status' => 'Success', 'Value' => 
-        Naviera::where('id',$request->route('id'))->first()]);
+        Reserva::where('id',$request->route('id'))->first()]);
     }
     /*@italo: Solicitud de todos los Productos*/
     public function show_all(Request $request)

@@ -102,3 +102,10 @@ Route::get('/proforma', 'ProformaController@show_all');
 Route::post('/proforma', 'ProformaController@create');
 Route::put('/proforma/{id}', 'ProformaController@update');
 Route::delete('/proforma/{id}', 'ProformaController@destroy');
+
+//Reservas
+Route::get('/reserva/{id}', 'ReservaController@show');
+Route::get('/reserva', 'ReservaController@show_all');
+Route::post('/reserva', 'ReservaController@create');
+Route::put('/reserva/{id}', 'ReservaController@update');
+Route::delete('/reserva/{id}', 'ReservaController@destroy');
