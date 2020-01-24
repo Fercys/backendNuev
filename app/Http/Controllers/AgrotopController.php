@@ -13,6 +13,7 @@ use App\ParametroAnalisisMicrobiologia;
 use App\ParametroAnalisisNutricionales;
 use App\FrecuenciaAnalisis;
 use App\ControlVersion;
+use App\Producto;
 
 class AgrotopController extends Controller
 {
@@ -74,7 +75,11 @@ class AgrotopController extends Controller
                 $this->save_agrotop_analisisParametrosMetalesPesados_table($value->ParametroAnalisisMetalesPesados,$id_save->id);
                 $this->save_agrotop_analisisParametrosMicotoxinas_table($value->ParametroAnalisisMicotoxinas,$id_save->id);
                 $this->save_agrotop_analisisParametrosMicrobiologia_table($value->ParametroAnalisisMicrobiologia,$id_save->id);
-                $this->save_agrotop_analisisParametrosNutricionales_table($value->ParametroAnalisisNutricionales,$id_save->id);               
+                $this->save_agrotop_analisisParametrosNutricionales_table($value->ParametroAnalisisNutricionales,$id_save->id);
+                $producto = new Producto;
+                $producto->detalle = $value->Producto;
+                $producto->precio = 0;
+                $producto->save();               
             }
             return response()->json(['Status' => 'Success', 'Value' =>'Registro guardado con exito']);
             //return response()->json(['Status' => 'Success', 'Value' =>json_decode($request->getBody()->getContents())]);
