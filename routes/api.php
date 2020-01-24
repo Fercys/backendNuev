@@ -36,6 +36,7 @@ Route::get('/order/{id}', 'OrderController@show');
 Route::get('/order', 'OrderController@show_all');
 Route::get('/order/client/{id}', 'OrderController@show_client');
 Route::get('/order_restrict', 'OrderController@restrict_show_all');
+Route::get('/all_order', 'OrderController@all_order');
 Route::post('/order', 'OrderController@create');
 Route::put('/order/{id}', 'OrderController@update');
 Route::put('/order/detail/{id}', 'OrderController@detail_update');

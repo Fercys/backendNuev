@@ -9,6 +9,9 @@ use App\ContratoProducto;
 use App\Producto;
 use App\Detalle;
 use App\Encabezado;
+use App\Reserva;
+use App\Naviera;
+use App\Proforma;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -108,6 +111,22 @@ class OrderController extends Controller
             unset($contract_product); unset($product);
         }
         return response()->json(['Status' => 'Success', 'Value' => $response]);    
+    }
+    public function all_order(Request $request)
+    {   
+        $header = Encabezado::all();
+        $response = array();
+        foreach($header as $element){
+            $detail = Detalle::where('id_pedido', $element['id'])->first();
+            $product = Producto::where('id', $detail['id_producto'])->first();
+            $reserva = Reserva::where('id', $element['reserva'])->first();
+            $proforma = Proforma::where('id', $element['proforma'])->first();
+            $naviera = Naviera::where('id', $reserva['id_naviera'])->first(); 
+            $element_array_insert = (object) array('Encabezado'=>$element,'Detalle'=>$detail,'Producto'=>$product,'Naviera'=>$naviera,'Proforma'=>$proforma);
+            array_push($response,$element_array_insert);
+            unset($contract_product); unset($product);
+        }
+        return response()->json(['Status' => 'Success', 'Value' => $response]);   
     }
     /*@italo: Actulizacion de Ordenes*/
     /* Estructura de ejemplo, ningun campo es obligatorio */
